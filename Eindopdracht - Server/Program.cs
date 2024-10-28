@@ -69,6 +69,7 @@ public class Server()
     {
         String[] strings = message.Split('|');
         return strings[1];
+    }
 }
 
 
