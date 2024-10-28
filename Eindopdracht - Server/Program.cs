@@ -1,4 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+// See https://aka.ms/new-console-template for more information
 
 using Eindopdracht___Server;
 using System.Collections;
@@ -132,6 +132,12 @@ public class Server()
                 socket1.Send(asen.GetBytes(message));
             }
         }
+    }
+
+    public static void saveHistory()
+    {
+        JSONHandler.saveList(ChatHistory);
+        ChatHistory = new List<string>();
     }
 
     public static String getUsername(String message)
