@@ -16,17 +16,12 @@ namespace Eindopdracht___Client
         public async Task Connect(string serverIp, int port)
         {
             messages = new List<string>();
-            //TcpClient = new TcpClient();
-            //await TcpClient.ConnectAsync(serverIp, port);
-            //Stream = TcpClient.GetStream();
-            //isListening = true;
-            //StartListening();
+            TcpClient = new TcpClient();
+            await TcpClient.ConnectAsync(serverIp, port);
+            Stream = TcpClient.GetStream();
+            isListening = true;
+            StartListening();
 
-
-            addMessage("message |Gerrit: Hoi");
-            addMessage("message |pieter: Hoi");
-            addMessage("message |daan: Hoi");
-            addMessage("message |erik: Hoi");
             
         }
 
@@ -57,6 +52,13 @@ namespace Eindopdracht___Client
 
                         if (message.StartsWith("message"))
                         {
+                            addMessage(message);
+                        }
+                        else if (message.StartsWith("chathistorie"))
+                        {
+
+                            SetChatHistorie(message);
+
                         }
                         else
                         {
@@ -83,10 +85,25 @@ namespace Eindopdracht___Client
             TcpClient.Close();
         }
 
+
         protected virtual void OnMessageReceived(string message)
         {
             Console.WriteLine($"Bericht ontvangen: {message}");
         }
+        
+        private void SetChatHistorie(string message)
+        {
+            String[] parts = message.Split("|");
+            string ChatHistorie= parts[1];
+            string TrimmedChatHistorie = ChatHistorie.Trim('[', ']');  
+            string[] items = TrimmedChatHistorie.Split(',');    
+            List<string> stringList = new List<string>(items);
+            foreach (string item in stringList)
+            {
+                addMessage("message |"+item);
+            };
+        }
+
 
 
         private void addMessage(string message) 

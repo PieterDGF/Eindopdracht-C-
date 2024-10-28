@@ -38,12 +38,12 @@ namespace Eindopdracht___Client
 
         private void Update_Tick(object sender, EventArgs e)
         {
-            //messages = Connection.getMessages();
-            //foreach (string item in messages)
-            //{
-            //    SetMessage(item);
-            //}
-            //messages.Clear();
+            messages = Connection.getMessages();
+            foreach (string item in messages)
+            {
+                SetMessage(item);
+            }
+            messages.Clear();
 
         }
 
@@ -67,7 +67,7 @@ namespace Eindopdracht___Client
 
         private void SendMessageToServer(string message)
         {
-            //Connection.SendMessageAsync(message).Wait();
+            Connection.SendMessageAsync(message).Wait();
         }
 
         public void SetMessage(string message)

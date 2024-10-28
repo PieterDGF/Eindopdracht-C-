@@ -24,9 +24,9 @@ namespace Eindopdracht___Client
         MainWindow mainWindow;
         public loginWindow()
         {
-            //Connection = new Connection();
-            //Connection.Connect(IPAddress.Loopback.ToString(), 8001);
-           
+            Connection = new Connection();
+            Connection.Connect(IPAddress.Loopback.ToString(), 8001);
+
             InitializeComponent();
         }
 
@@ -35,8 +35,8 @@ namespace Eindopdracht___Client
             string message = UserName.Text;
             if (!string.IsNullOrWhiteSpace(message))
             {
-                //Connection.SendMessageAsync("username |"+message).Wait();
-                mainWindow=new MainWindow(Connection);
+                Connection.SendMessageAsync("username |" + message).Wait();
+                mainWindow = new MainWindow(Connection);
                 mainWindow.Show();
                 this.Close();
             }
