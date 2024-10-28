@@ -25,19 +25,6 @@ public class Server()
             ChatHistory = new List<String>();
             JSONHandler = new JSONHandler();
 
-            List<String> list = new List<String>();
-            list.Add("lol1");
-            list.Add("lol2");
-            list.Add("lol3");
-            list.Add("lol4");
-            list.Add("lol5");
-            list.Add("lol6");
-            JSONHandler.saveList(list);
-            List<String> test = JSONHandler.readList();
-            Console.WriteLine(test.Count);
-            Console.WriteLine("[" + string.Join(",", test.ToArray()) + "]");
-
-
             while (true)
             {
                 Socket socket = tcpListener.AcceptSocket();
@@ -83,6 +70,12 @@ public class Server()
                 socket1.Send(asen.GetBytes(message));
             }
         }
+    }
+
+    public static void saveHistory()
+    {
+        JSONHandler.saveList(ChatHistory);
+        ChatHistory = new List<string>();
     }
 
     public static String getUsername(String message)
