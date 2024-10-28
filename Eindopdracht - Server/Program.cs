@@ -21,7 +21,7 @@ public class Server()
     public static void Main(string[] args)
     {
 
-        updateTimer = new System.Timers.Timer(1000);
+        updateTimer = new System.Timers.Timer(1);
         updateTimer.Elapsed += OnTimedEvent;
         updateTimer.AutoReset = true;
         updateTimer.Enabled = true;
@@ -33,39 +33,11 @@ public class Server()
             TcpListener tcpListener = new TcpListener(IPAddress.Any, 8001);
             tcpListener.Start();
 
-<<<<<<< HEAD
             Console.WriteLine("Ik ben aan het luisteren");
 
-            socketList = new ArrayList();
-            testData = new List<string>();
-            testData.Add("hoi");
-            testData.Add("doei");
-            testData.Add("hoi");
-            testData.Add("doei");
-            testData.Add("hoi");
-            testData.Add("doei");
-            testData.Add("hoi");
-            testData.Add("doei");
-
-
-=======
             socketList = new List<Socket>();
             ChatHistory = new List<String>();
             JSONHandler = new JSONHandler();
-
-            List<String> list = new List<String>();
-            list.Add("lol1");
-            list.Add("lol2");
-            list.Add("lol3");
-            list.Add("lol4");
-            list.Add("lol5");
-            list.Add("lol6");
-            JSONHandler.saveList(list);
-            List<String> test = JSONHandler.readList();
-            Console.WriteLine(test.Count);
-            Console.WriteLine("[" + string.Join(",", test.ToArray()) + "]");
->>>>>>> origin/FileIO
-
 
             while (true)
             {
@@ -84,58 +56,78 @@ public class Server()
 
     private static void OnTimedEvent(Object source, ElapsedEventArgs e)
     {
-        Console.WriteLine("Timer event triggered at {0}", e.SignalTime);
+        //saveHistory();
     }
 
     public static void newSocket(Object object1)
     {
         Socket socket = object1 as Socket;
+        byte[] b = new byte[100000];
 
-        byte[] b = new byte[100];
-        int k = socket.Receive(b);
-        String name = getUsername(System.Text.Encoding.ASCII.GetString(b));
-        Console.WriteLine(name);
-
-<<<<<<< HEAD
-        string formattedData = "[" + string.Join(",", testData) + "]";
-
-        socket.Send(asen.GetBytes("chathistorie |"+formattedData)); 
-=======
-        socket.Send(asen.GetBytes(getHistory()));
->>>>>>> origin/FileIO
-
-        socketList.Add(socket);
-
-        while (true)
+        try
         {
-            b = new byte[100];
-            k = socket.Receive(b);
-<<<<<<< HEAD
-            String message = "message |" + name + ": " + System.Text.Encoding.ASCII.GetString(b);
-            sendMessageToAll(socket, message);
-            Console.WriteLine("bericht gestuurd"+message);
-=======
-            String message = name + ": " + System.Text.Encoding.ASCII.GetString(b);
+            int k = socket.Receive(b);
+            String name = getUsername(System.Text.Encoding.ASCII.GetString(b));
+            Console.WriteLine(name);
 
-            ChatHistory.Add(message);
-            sendMessageToAll(socket, "message |" + message);
->>>>>>> origin/FileIO
+            socket.Send(asen.GetBytes(getHistory()));
+            socketList.Add(socket);
+
+            while (true)
+            {
+                b = new byte[1024];
+                k = socket.Receive(b);
+
+                if (k == 0)
+                {
+                    Console.WriteLine("Client heeft de verbinding verbroken.");
+                    break;
+                }
+
+                String message = (name + System.Text.Encoding.ASCII.GetString(b));
+                ChatHistory.Add(message);
+                sendMessageToAll(socket, "message |" + message);
+                Console.WriteLine("bericht gestuurd: " + message);
+            }
+        }
+        catch (SocketException se)
+        {
+            Console.WriteLine("SocketException: " + se.Message);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Exception: " + ex.Message);
+        }
+        finally
+        {
+            socketList.Remove(socket);
+            if (socket.Connected)
+            {
+                socket.Shutdown(SocketShutdown.Both);
+            }
+            socket.Close();
+            Console.WriteLine("Verbinding met client gesloten.");
         }
     }
 
+
     public static void sendMessageToAll(Socket socket, String message)
     {
+        Console.WriteLine("deze message ga ik doorsturen:" + message);
         foreach (Socket socket1 in socketList)
         {
             if (socket1 != socket)
             {
+
                 socket1.Send(asen.GetBytes(message));
             }
         }
+        saveHistory();
     }
 
     public static void saveHistory()
     {
+        Console.WriteLine("History gesaved");
         JSONHandler.saveList(ChatHistory);
         ChatHistory = new List<string>();
     }
@@ -150,12 +142,22 @@ public class Server()
     {
         List<String> history = JSONHandler.readList();
         history.AddRange(ChatHistory);
+        String Result;
 
-        String result = "[" + string.Join(",", history.ToArray()) + "]";
+        if (history.Count > 0)
+        {
+            Result = "chathistory |[" + string.Join(",", history.ToArray()) + "]";
+            
+            Console.WriteLine(Result);
 
-        Console.WriteLine(result);
+        }
+        else
+        {
+            Result = "chathistory |[]";
 
-        return result;
+        }
+        return Result;
+
     }
 }
 

@@ -54,6 +54,16 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Eindopdracht - Client\Eindopdracht - Client.csproj">
+      <Project>{157d2c13-a5ff-44d9-81bd-48e0f1502310}</Project>
+      <Name>Eindopdracht - Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Eindopdracht - Server\Eindopdracht - Server.csproj">
+      <Project>{7920d29d-c03c-48ea-af13-91b972324347}</Project>
+      <Name>Eindopdracht - Server</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

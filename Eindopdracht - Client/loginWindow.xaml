@@ -7,8 +7,9 @@
         mc:Ignorable="d"
         Title="loginWindow" Height="450" Width="800">
     <Grid>
-        <TextBox HorizontalAlignment="Center" Margin="0,217,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" Name="UserName"/>
+        <TextBox HorizontalAlignment="Center" Margin="0,217,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Name="UserName" TextChanged="UserName_TextChanged"/>
         <Button Content="Go" HorizontalAlignment="Center" Margin="0,240,0,0" VerticalAlignment="Top" Name="GoButton" Click="GoButton_Click"/>
+        <TextBlock HorizontalAlignment="Center" Margin="0,196,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Language="nl-nl" Text="Fill in your Name"/></TextBlock>
 
     </Grid>
 </Window>

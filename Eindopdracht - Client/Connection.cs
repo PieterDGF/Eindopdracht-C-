@@ -98,6 +98,7 @@ namespace Eindopdracht___Client
             string TrimmedChatHistorie = ChatHistorie.Trim('[', ']');  
             string[] items = TrimmedChatHistorie.Split(',');    
             List<string> stringList = new List<string>(items);
+
             foreach (string item in stringList)
             {
                 addMessage("message |"+item);
@@ -106,7 +107,7 @@ namespace Eindopdracht___Client
 
 
 
-        private void addMessage(string message) 
+        private void addMessage(string message)
         {
             string[] parts = message.Split("|");
 
