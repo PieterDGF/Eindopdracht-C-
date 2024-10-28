@@ -1,6 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using Eindopdracht___Server;
 using System.Collections;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -8,7 +10,9 @@ using System.Timers;
 
 public class Server()
 {
-    private static ArrayList socketList;
+    private static List<Socket> socketList;
+    private static List<String> ChatHistory;
+    private static JSONHandler JSONHandler;
     private static ASCIIEncoding asen = new ASCIIEncoding();
     private static List<string> testData;
     private static System.Timers.Timer updateTimer;
@@ -29,6 +33,7 @@ public class Server()
             TcpListener tcpListener = new TcpListener(IPAddress.Any, 8001);
             tcpListener.Start();
 
+<<<<<<< HEAD
             Console.WriteLine("Ik ben aan het luisteren");
 
             socketList = new ArrayList();
@@ -43,6 +48,23 @@ public class Server()
             testData.Add("doei");
 
 
+=======
+            socketList = new List<Socket>();
+            ChatHistory = new List<String>();
+            JSONHandler = new JSONHandler();
+
+            List<String> list = new List<String>();
+            list.Add("lol1");
+            list.Add("lol2");
+            list.Add("lol3");
+            list.Add("lol4");
+            list.Add("lol5");
+            list.Add("lol6");
+            JSONHandler.saveList(list);
+            List<String> test = JSONHandler.readList();
+            Console.WriteLine(test.Count);
+            Console.WriteLine("[" + string.Join(",", test.ToArray()) + "]");
+>>>>>>> origin/FileIO
 
 
             while (true)
@@ -74,9 +96,13 @@ public class Server()
         String name = getUsername(System.Text.Encoding.ASCII.GetString(b));
         Console.WriteLine(name);
 
+<<<<<<< HEAD
         string formattedData = "[" + string.Join(",", testData) + "]";
 
         socket.Send(asen.GetBytes("chathistorie |"+formattedData)); 
+=======
+        socket.Send(asen.GetBytes(getHistory()));
+>>>>>>> origin/FileIO
 
         socketList.Add(socket);
 
@@ -84,9 +110,16 @@ public class Server()
         {
             b = new byte[100];
             k = socket.Receive(b);
+<<<<<<< HEAD
             String message = "message |" + name + ": " + System.Text.Encoding.ASCII.GetString(b);
             sendMessageToAll(socket, message);
             Console.WriteLine("bericht gestuurd"+message);
+=======
+            String message = name + ": " + System.Text.Encoding.ASCII.GetString(b);
+
+            ChatHistory.Add(message);
+            sendMessageToAll(socket, "message |" + message);
+>>>>>>> origin/FileIO
         }
     }
 
@@ -105,6 +138,18 @@ public class Server()
     {
         String[] strings = message.Split('|');
         return strings[1];
+    }
+
+    public static String getHistory()
+    {
+        List<String> history = JSONHandler.readList();
+        history.AddRange(ChatHistory);
+
+        String result = "[" + string.Join(",", history.ToArray()) + "]";
+
+        Console.WriteLine(result);
+
+        return result;
     }
 }
 
