@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿using System.Collections.ObjectModel;
+using System.Net.Sockets;
+using System.Net;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,18 +11,43 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+using Microsoft.VisualBasic;
 
 namespace Eindopdracht___Client
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
     public partial class MainWindow : Window
     {
+
+        private DispatcherTimer updateTimer;
+        private List<string> messages;
+
+        static String Message;
+        Connection Connection;
         public MainWindow()
         {
             InitializeComponent();
+            Connection = new Connection();
+            Connection.Connect(IPAddress.Loopback.ToString(), 8001);
+            updateTimer = new DispatcherTimer();
+            updateTimer.Interval = TimeSpan.FromSeconds(0.5);
+            updateTimer.Tick += Update_Tick;
+            updateTimer.Start();
         }
+
+        private void Update_Tick(object sender, EventArgs e)
+        {
+            messages = Connection.getMessages();
+            foreach (string item in messages)
+            {
+                SetMessage(item);
+            }
+            messages.Clear();
+
+        }
+
+
 
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
@@ -39,6 +67,14 @@ namespace Eindopdracht___Client
 
         private void SendMessageToServer(string message)
         {
+            //Connection.SendMessageAsync(message).Wait();
         }
+
+        public void SetMessage(string message)
+        {
+            ChatBox.Text += message + "\n";
+        }
+
+
     }
 }
