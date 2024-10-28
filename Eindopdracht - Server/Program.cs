@@ -23,7 +23,6 @@ public class Server()
             while (true)
             {
                 Socket socket = tcpListener.AcceptSocket();
-                socketList.Add(socket);
                 Thread socketThread = new Thread(new ParameterizedThreadStart(newSocket));
                 socketThread.Start(socket);
             }
@@ -40,9 +39,11 @@ public class Server()
 
         byte[] b = new byte[100];
         int k = socket.Receive(b);
-        String name = System.Text.Encoding.ASCII.GetString(b);
+        String name = getUsername(System.Text.Encoding.ASCII.GetString(b));
 
         socket.Send(asen.GetBytes("chat history")); //TODO moet nog een chat history worden
+
+        socketList.Add(socket);
 
         while (true)
         {
@@ -63,6 +64,11 @@ public class Server()
             }
         }
     }
+
+    public static String getUsername(String message)
+    {
+        String[] strings = message.Split('|');
+        return strings[1];
 }
 
 
