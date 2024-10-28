@@ -62,12 +62,13 @@ public class Server()
     public static void newSocket(Object object1)
     {
         Socket socket = object1 as Socket;
-        byte[] b = new byte[100000];
+        byte[] b = new byte[1024];
 
         try
         {
             int k = socket.Receive(b);
-            String name = getUsername(System.Text.Encoding.ASCII.GetString(b));
+            //String name = getUsername(System.Text.Encoding.ASCII.GetString(b));
+            String name = "P1";
             Console.WriteLine(name);
 
             socket.Send(asen.GetBytes(getHistory()));
@@ -84,9 +85,10 @@ public class Server()
                     break;
                 }
 
-                String message = (name + System.Text.Encoding.ASCII.GetString(b));
+                String message = (System.Text.Encoding.ASCII.GetString(b));
                 ChatHistory.Add(message);
-                sendMessageToAll(socket, "message |" + message);
+                string message1= name + ": " + message;
+                sendMessageToAll(socket, "message |" +message1);
                 Console.WriteLine("bericht gestuurd: " + message);
             }
         }
@@ -122,7 +124,6 @@ public class Server()
                 socket1.Send(asen.GetBytes(message));
             }
         }
-        saveHistory();
     }
 
     public static void saveHistory()
@@ -147,7 +148,7 @@ public class Server()
         if (history.Count > 0)
         {
             Result = "chathistory |[" + string.Join(",", history.ToArray()) + "]";
-            
+
             Console.WriteLine(Result);
 
         }

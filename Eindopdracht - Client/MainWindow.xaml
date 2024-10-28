@@ -12,20 +12,12 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <ListBox x:Name="UserList" Grid.Column="0" 
-                 SelectionChanged="UserList_SelectionChanged"
-                 Margin="5">
-            <ListBoxItem>piet</ListBoxItem>
-            <ListBoxItem>rick</ListBoxItem>
-            <ListBoxItem>erik</ListBoxItem>
-        </ListBox>
-
         <StackPanel Grid.Column="1" Margin="5">
             <TextBox x:Name="ChatBox" 
                      Height="300" 
                      VerticalScrollBarVisibility="Auto"
                      IsReadOnly="True" 
-                     TextWrapping="Wrap"/>
+                     TextWrapping="Wrap" Width="580"/>
 
             <TextBox x:Name="MessageTextBox" Height="40" 
                      VerticalAlignment="Bottom" 
