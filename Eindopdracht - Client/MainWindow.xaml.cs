@@ -25,11 +25,11 @@ namespace Eindopdracht___Client
 
         static String Message;
         Connection Connection;
-        public MainWindow()
+        public MainWindow(Connection connection)
         {
             InitializeComponent();
-            Connection = new Connection();
-            Connection.Connect(IPAddress.Loopback.ToString(), 8001);
+            Connection = connection;
+          
             updateTimer = new DispatcherTimer();
             updateTimer.Interval = TimeSpan.FromSeconds(0.5);
             updateTimer.Tick += Update_Tick;
@@ -38,12 +38,12 @@ namespace Eindopdracht___Client
 
         private void Update_Tick(object sender, EventArgs e)
         {
-            messages = Connection.getMessages();
-            foreach (string item in messages)
-            {
-                SetMessage(item);
-            }
-            messages.Clear();
+            //messages = Connection.getMessages();
+            //foreach (string item in messages)
+            //{
+            //    SetMessage(item);
+            //}
+            //messages.Clear();
 
         }
 

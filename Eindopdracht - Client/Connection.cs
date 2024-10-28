@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Eindopdracht___Client
 {
-    internal class Connection
+    public  class Connection
     {
         private TcpClient TcpClient;
         private Stream Stream;
