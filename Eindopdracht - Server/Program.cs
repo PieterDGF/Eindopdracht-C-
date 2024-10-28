@@ -1,13 +1,17 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using Eindopdracht___Server;
 using System.Collections;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
 public class Server()
 {
-    private static ArrayList socketList;
+    private static List<Socket> socketList;
+    private static List<String> ChatHistory;
+    private static JSONHandler JSONHandler;
     private static ASCIIEncoding asen = new ASCIIEncoding();
 
     public static void Main(string[] args)
@@ -17,7 +21,21 @@ public class Server()
             TcpListener tcpListener = new TcpListener(IPAddress.Any, 8001);
             tcpListener.Start();
 
-            socketList = new ArrayList();
+            socketList = new List<Socket>();
+            ChatHistory = new List<String>();
+            JSONHandler = new JSONHandler();
+
+            List<String> list = new List<String>();
+            list.Add("lol1");
+            list.Add("lol2");
+            list.Add("lol3");
+            list.Add("lol4");
+            list.Add("lol5");
+            list.Add("lol6");
+            JSONHandler.saveList(list);
+            List<String> test = JSONHandler.readList();
+            Console.WriteLine(test.Count);
+            Console.WriteLine("[" + string.Join(",", test.ToArray()) + "]");
 
 
             while (true)
@@ -41,7 +59,7 @@ public class Server()
         int k = socket.Receive(b);
         String name = getUsername(System.Text.Encoding.ASCII.GetString(b));
 
-        socket.Send(asen.GetBytes("chat history")); //TODO moet nog een chat history worden
+        socket.Send(asen.GetBytes(getHistory()));
 
         socketList.Add(socket);
 
@@ -49,8 +67,10 @@ public class Server()
         {
             b = new byte[100];
             k = socket.Receive(b);
-            String message = "message |" + name + ": " + System.Text.Encoding.ASCII.GetString(b);
-            sendMessageToAll(socket, message);
+            String message = name + ": " + System.Text.Encoding.ASCII.GetString(b);
+
+            ChatHistory.Add(message);
+            sendMessageToAll(socket, "message |" + message);
         }
     }
 
@@ -69,6 +89,18 @@ public class Server()
     {
         String[] strings = message.Split('|');
         return strings[1];
+    }
+
+    public static String getHistory()
+    {
+        List<String> history = JSONHandler.readList();
+        history.AddRange(ChatHistory);
+
+        String result = "[" + string.Join(",", history.ToArray()) + "]";
+
+        Console.WriteLine(result);
+
+        return result;
     }
 }
 
